@@ -107,3 +107,47 @@ export async function getImage(id: string): Promise<ImageRecord | null> {
   const record = await db.get(STORE_NAME, id);
   return record || null;
 }
+
+export interface ImageWithSize extends Omit<ImageRecord, "blob"> {
+  size: number;
+}
+
+export async function getImagesWithStats(userId: string): Promise<{
+  images: ImageWithSize[];
+  totalSize: number;
+  totalCount: number;
+  recentCount: number;
+}> {
+  const db = await getDB();
+  const tx = db.transaction(STORE_NAME, "readonly");
+  const index = tx.store.index("by-user");
+  const records = await index.getAll(userId);
+
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  let totalSize = 0;
+  let recentCount = 0;
+
+  const images: ImageWithSize[] = records.map((record) => {
+    const size = record.blob?.size || 0;
+    totalSize += size;
+
+    if (new Date(record.createdAt) >= sevenDaysAgo) {
+      recentCount++;
+    }
+
+    const { blob, ...rest } = record;
+    return { ...rest, size };
+  });
+
+  // Sort by createdAt descending
+  images.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  return {
+    images,
+    totalSize,
+    totalCount: records.length,
+    recentCount,
+  };
+}
