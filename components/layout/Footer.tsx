@@ -1,10 +1,35 @@
 import Link from "next/link";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, Github, Twitter, Linkedin, Mail, AlertCircle } from "lucide-react";
+
+const socialLinks = [
+  { href: "#", label: "GitHub", icon: Github },
+  { href: "#", label: "Twitter", icon: Twitter },
+  { href: "#", label: "LinkedIn", icon: Linkedin },
+  { href: "#", label: "Email", icon: Mail },
+];
 
 export function Footer() {
   return (
     <footer className="border-t border-border/30 glass-subtle">
       <div className="container py-12">
+        {/* Local Storage Disclaimer */}
+        <div className="mb-10 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="font-medium text-amber-600 dark:text-amber-400">
+                Local-Only Storage Disclaimer
+              </p>
+              <p className="text-muted-foreground mt-1">
+                All your data (images, profile, settings) is stored <strong>locally in your browser</strong> using 
+                localStorage and IndexedDB. Nothing is sent to any server. This means your data is private, but also 
+                that <strong>clearing your browser data will permanently delete everything</strong>. 
+                We recommend periodically downloading important images as backups.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
@@ -14,9 +39,27 @@ export function Footer() {
               </div>
               <span>ImageVault</span>
             </Link>
-            <p className="text-sm text-muted-foreground">
-              A privacy-first image manager that runs entirely in your browser.
+            <p className="text-sm text-muted-foreground mb-4">
+              A privacy-first image manager that runs entirely in your browser. No servers, no cloud—just you and your images.
             </p>
+            
+            {/* Social Links */}
+            <div className="flex items-center gap-2">
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all duration-200"
+                    aria-label={social.label}
+                    title={social.label}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                );
+              })}
+            </div>
           </div>
 
           {/* Product */}
@@ -31,6 +74,9 @@ export function Footer() {
               </li>
               <li>
                 <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+              </li>
+              <li>
+                <a href="#demo" className="hover:text-foreground transition-colors">Demo</a>
               </li>
             </ul>
           </div>
@@ -47,6 +93,9 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/auth/sign-in" className="hover:text-foreground transition-colors">Sign in</Link>
+              </li>
+              <li>
+                <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
               </li>
             </ul>
           </div>
@@ -68,12 +117,19 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border/30 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} ImageVault. Built with Next.js & Tailwind CSS.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Made with ❤️ for privacy-conscious users.
+        <div className="border-t border-border/30 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} ImageVault. Built with Next.js & Tailwind CSS.
+            </p>
+            <div className="flex items-center gap-4">
+              <p className="text-sm text-muted-foreground">
+                Made with ❤️ for privacy-conscious users.
+              </p>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground/60 text-center mt-4">
+            This is a demo application. No actual data is collected or stored on any server.
           </p>
         </div>
       </div>

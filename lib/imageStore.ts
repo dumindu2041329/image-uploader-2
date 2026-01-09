@@ -148,6 +148,20 @@ export interface ImageWithSize extends Omit<ImageRecord, "blob"> {
   size: number;
 }
 
+export async function clearUserImages(userId: string): Promise<number> {
+  const db = await getDB();
+  const tx = db.transaction(STORE_NAME, "readwrite");
+  const index = tx.store.index("by-user");
+  const records = await index.getAllKeys(userId);
+  
+  for (const key of records) {
+    await tx.store.delete(key);
+  }
+  
+  await tx.done;
+  return records.length;
+}
+
 export async function getImagesWithStats(userId: string): Promise<{
   images: ImageWithSize[];
   totalSize: number;
