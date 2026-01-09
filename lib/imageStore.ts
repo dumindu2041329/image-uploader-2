@@ -37,19 +37,28 @@ function getDB(): Promise<IDBPDatabase<ImageDB>> {
   return dbPromise;
 }
 
+export interface ImageMetadata {
+  displayName: string;
+  tags: string[];
+}
+
 export async function addImages(
   userId: string,
-  files: File[]
+  files: File[],
+  metadata?: ImageMetadata[]
 ): Promise<ImageRecord[]> {
   const db = await getDB();
   const records: ImageRecord[] = [];
 
-  for (const file of files) {
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const meta = metadata?.[i];
+    
     const record: ImageRecord = {
       id: crypto.randomUUID(),
       userId,
-      name: file.name,
-      tags: [],
+      name: meta?.displayName || file.name,
+      tags: meta?.tags || [],
       createdAt: new Date().toISOString(),
       blob: file,
     };
@@ -106,6 +115,33 @@ export async function getImage(id: string): Promise<ImageRecord | null> {
   const db = await getDB();
   const record = await db.get(STORE_NAME, id);
   return record || null;
+}
+
+export interface ImageWithBlob {
+  id: string;
+  userId: string;
+  name: string;
+  tags: string[];
+  createdAt: string;
+  size: number;
+  blob: Blob;
+}
+
+export async function getImagesWithBlobs(userId: string): Promise<ImageWithBlob[]> {
+  const db = await getDB();
+  const tx = db.transaction(STORE_NAME, "readonly");
+  const index = tx.store.index("by-user");
+  const records = await index.getAll(userId);
+
+  return records.map((record) => ({
+    id: record.id,
+    userId: record.userId,
+    name: record.name,
+    tags: record.tags,
+    createdAt: record.createdAt,
+    size: record.blob?.size || 0,
+    blob: record.blob,
+  }));
 }
 
 export interface ImageWithSize extends Omit<ImageRecord, "blob"> {
