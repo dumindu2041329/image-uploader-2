@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { PublicNav } from "@/components/layout/PublicNav";
 import { Footer } from "@/components/layout/Footer";
+import { HeroVisual } from "@/components/landing/HeroVisual";
 import { 
   Accordion, 
   AccordionContent, 
@@ -20,9 +21,6 @@ import {
   ArrowRight,
   Check,
   Star,
-  Image as ImageIcon,
-  Search,
-  Shield,
   Zap,
   ChevronRight,
   Quote,
@@ -251,44 +249,9 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Hero Mock UI */}
-              <div id="demo" className="relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl blur-3xl" />
-                <div className="relative glass rounded-2xl p-6 space-y-4">
-                  {/* Mock Upload Card */}
-                  <div className="border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-primary/50 transition-colors">
-                    <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-sm font-medium">Drop images here or click to upload</p>
-                    <p className="text-xs text-muted-foreground mt-1">PNG, JPG, GIF up to 10MB</p>
-                  </div>
-
-                  {/* Mock Gallery Grid */}
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      "bg-gradient-to-br from-pink-500 to-orange-400",
-                      "bg-gradient-to-br from-blue-500 to-cyan-400",
-                      "bg-gradient-to-br from-green-500 to-emerald-400",
-                      "bg-gradient-to-br from-purple-500 to-pink-400",
-                      "bg-gradient-to-br from-yellow-500 to-orange-400",
-                      "bg-gradient-to-br from-indigo-500 to-blue-400",
-                    ].map((gradient, i) => (
-                      <div
-                        key={i}
-                        className={`aspect-square rounded-lg ${gradient} flex items-center justify-center`}
-                      >
-                        <ImageIcon className="h-6 w-6 text-white/50" />
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Mock Tags */}
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">vacation</Badge>
-                    <Badge variant="secondary">family</Badge>
-                    <Badge variant="secondary">2024</Badge>
-                    <Badge variant="outline">+ Add tag</Badge>
-                  </div>
-                </div>
+              {/* Hero 3D Visual */}
+              <div id="demo">
+                <HeroVisual />
               </div>
             </div>
           </div>
