@@ -74,7 +74,7 @@ const DropdownMenuContent = React.forwardRef<
     <div
       ref={contentRef}
       className={cn(
-        "absolute z-50 mt-2 w-56 rounded-md border bg-popover p-1 text-popover-foreground shadow-md animate-in",
+        "absolute z-50 mt-2 w-56 bg-popover border border-border rounded-xl p-2 text-popover-foreground shadow-lg animate-scale-in",
         align === "end" ? "right-0" : "left-0",
         className
       )}
@@ -89,17 +89,28 @@ DropdownMenuContent.displayName = "DropdownMenuContent";
 const DropdownMenuItem = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { disabled?: boolean }
->(({ className, disabled, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-      disabled && "pointer-events-none opacity-50",
-      className
-    )}
-    {...props}
-  />
-));
+>(({ className, disabled, onClick, ...props }, ref) => {
+  const context = React.useContext(DropdownMenuContext);
+  if (!context) throw new Error("DropdownMenuItem must be used within DropdownMenu");
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "relative flex cursor-pointer select-none items-center rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150 hover:bg-accent/50 hover:text-accent-foreground focus:bg-accent/50 focus:text-accent-foreground",
+        disabled && "pointer-events-none opacity-50",
+        className
+      )}
+      onClick={(e) => {
+        if (!disabled) {
+          onClick?.(e);
+          context.setOpen(false);
+        }
+      }}
+      {...props}
+    />
+  );
+});
 DropdownMenuItem.displayName = "DropdownMenuItem";
 
 const DropdownMenuSeparator = React.forwardRef<
@@ -108,7 +119,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("-mx-1 my-1 h-px bg-muted", className)}
+    className={cn("-mx-1 my-1 h-px bg-border/50", className)}
     {...props}
   />
 ));

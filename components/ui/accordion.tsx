@@ -52,7 +52,7 @@ const AccordionItemContext = React.createContext<string | null>(null);
 export function AccordionItem({ children, value, className }: AccordionItemProps) {
   return (
     <AccordionItemContext.Provider value={value}>
-      <div className={cn("border rounded-lg", className)}>{children}</div>
+      <div className={cn("glass rounded-xl overflow-hidden", className)}>{children}</div>
     </AccordionItemContext.Provider>
   );
 }
@@ -77,7 +77,8 @@ export function AccordionTrigger({ children, className }: AccordionTriggerProps)
       type="button"
       onClick={() => context.toggleItem(value)}
       className={cn(
-        "flex w-full items-center justify-between p-4 text-left font-medium transition-all hover:bg-muted/50",
+        "flex w-full items-center justify-between p-4 text-left font-medium transition-all duration-200 hover:bg-accent/30",
+        isOpen && "bg-accent/20",
         className
       )}
       aria-expanded={isOpen}
@@ -85,8 +86,8 @@ export function AccordionTrigger({ children, className }: AccordionTriggerProps)
       {children}
       <ChevronDown
         className={cn(
-          "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
-          isOpen && "rotate-180"
+          "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300",
+          isOpen && "rotate-180 text-primary"
         )}
       />
     </button>
@@ -113,7 +114,7 @@ export function AccordionContent({ children, className }: AccordionContentProps)
   return (
     <div
       className={cn(
-        "overflow-hidden border-t px-4 pb-4 pt-2 text-sm text-muted-foreground",
+        "overflow-hidden border-t border-border/30 px-4 pb-4 pt-3 text-sm text-muted-foreground animate-in bg-accent/10",
         className
       )}
     >

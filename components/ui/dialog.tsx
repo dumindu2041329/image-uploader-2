@@ -25,9 +25,9 @@ const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50">
+    <div className="fixed inset-0 z-50 animate-fade-in">
       <div
-        className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+        className="fixed inset-0 bg-background/60 backdrop-blur-md"
         onClick={() => onOpenChange?.(false)}
       />
       {children}
@@ -39,11 +39,11 @@ const DialogContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { onClose?: () => void }
 >(({ className, children, onClose, ...props }, ref) => (
-  <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
+  <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg px-4">
     <div
       ref={ref}
       className={cn(
-        "glass rounded-lg p-6 shadow-lg animate-in",
+        "glass-strong rounded-2xl p-6 shadow-2xl animate-scale-in gradient-border",
         className
       )}
       {...props}
@@ -51,7 +51,7 @@ const DialogContent = React.forwardRef<
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="absolute right-4 top-4 rounded-lg p-1 opacity-70 ring-offset-background transition-all hover:opacity-100 hover:bg-accent/50 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>

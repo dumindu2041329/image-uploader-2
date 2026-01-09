@@ -17,22 +17,22 @@ export function PublicNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 glass border-b border-border/30">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl group">
+          <div className="h-9 w-9 rounded-xl bg-primary shadow-lg shadow-primary/25 flex items-center justify-center transition-transform group-hover:scale-105">
             <ImageIcon className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span>ImageVault</span>
+          <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">ImageVault</span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all duration-200"
             >
               {link.label}
             </a>
@@ -42,10 +42,10 @@ export function PublicNav() {
         <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
           <Link href="/auth/sign-in">
-            <Button variant="ghost">Sign In</Button>
+            <Button variant="ghost" className="rounded-xl">Sign In</Button>
           </Link>
           <Link href="/auth/sign-up">
-            <Button>Get Started</Button>
+            <Button className="rounded-xl">Get Started</Button>
           </Link>
         </div>
 
@@ -55,6 +55,7 @@ export function PublicNav() {
           <Button
             variant="ghost"
             size="icon"
+            className="rounded-xl"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -65,24 +66,24 @@ export function PublicNav() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t bg-background">
-          <div className="container py-4 space-y-4">
+        <div className="md:hidden border-t border-border/30 glass-subtle animate-in">
+          <div className="container py-4 space-y-2">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="block px-4 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all duration-200"
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
               </a>
             ))}
-            <div className="flex flex-col gap-2 pt-4 border-t">
+            <div className="flex flex-col gap-2 pt-4 border-t border-border/30">
               <Link href="/auth/sign-in" onClick={() => setMobileOpen(false)}>
-                <Button variant="ghost" className="w-full">Sign In</Button>
+                <Button variant="ghost" className="w-full rounded-xl">Sign In</Button>
               </Link>
               <Link href="/auth/sign-up" onClick={() => setMobileOpen(false)}>
-                <Button className="w-full">Get Started</Button>
+                <Button className="w-full rounded-xl">Get Started</Button>
               </Link>
             </div>
           </div>

@@ -53,16 +53,16 @@ export function useToast() {
 
 function ToastContainer({ toasts, dismiss }: { toasts: Toast[]; dismiss: (id: string) => void }) {
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 w-full max-w-sm pointer-events-none">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-3 w-full max-w-sm pointer-events-none">
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`glass rounded-lg p-4 shadow-lg animate-in pointer-events-auto ${
+          className={`glass-strong rounded-xl p-4 shadow-xl animate-in pointer-events-auto cursor-pointer transition-all duration-200 hover:scale-[1.02] ${
             toast.type === "success"
-              ? "border-l-4 border-green-500"
+              ? "border-l-4 border-green-500 shadow-green-500/10"
               : toast.type === "error"
-              ? "border-l-4 border-red-500"
-              : "border-l-4 border-blue-500"
+              ? "border-l-4 border-red-500 shadow-red-500/10"
+              : "border-l-4 border-blue-500 shadow-blue-500/10"
           }`}
           onClick={() => dismiss(toast.id)}
         >

@@ -39,9 +39,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 flex-col border-r bg-background">
-        <div className="flex h-16 items-center gap-2 border-b px-6">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+      <aside className="hidden md:flex w-64 flex-col glass-subtle border-r border-border/30">
+        <div className="flex h-16 items-center gap-2 border-b border-border/30 px-6">
+          <div className="h-9 w-9 rounded-xl bg-primary shadow-lg shadow-primary/25 flex items-center justify-center">
             <ImageIcon className="h-5 w-5 text-primary-foreground" />
           </div>
           <span className="font-bold text-lg">ImageVault</span>
@@ -56,10 +56,10 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
+                    : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -74,18 +74,18 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-background/60 backdrop-blur-md"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <aside className="fixed left-0 top-0 h-full w-64 flex flex-col border-r bg-background animate-in">
-            <div className="flex h-16 items-center justify-between px-6">
+          <aside className="fixed left-0 top-0 h-full w-64 flex flex-col glass-strong border-r border-border/30 animate-in">
+            <div className="flex h-16 items-center justify-between px-6 border-b border-border/30">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+                <div className="h-9 w-9 rounded-xl bg-primary shadow-lg shadow-primary/25 flex items-center justify-center">
                   <ImageIcon className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <span className="font-bold text-lg">ImageVault</span>
               </div>
-              <button onClick={() => setMobileMenuOpen(false)}>
+              <button onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-lg hover:bg-accent/50 transition-colors">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -100,10 +100,10 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                       isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                        ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
+                        : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
                     )}
                   >
                     <Icon className="h-4 w-4" />
@@ -119,12 +119,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Topbar */}
-        <header className="flex h-16 items-center justify-between border-b px-6 bg-background">
+        <header className="flex h-16 items-center justify-between border-b border-border/30 px-6 glass-subtle">
           <button
-            className="md:hidden"
+            className="md:hidden p-2 rounded-lg hover:bg-accent/50 transition-colors"
             onClick={() => setMobileMenuOpen(true)}
           >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-5 w-5" />
           </button>
           
           <div className="flex-1" />
@@ -134,15 +134,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           
             <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-2">
+              <Button variant="ghost" className="gap-2 rounded-xl">
                 {user?.avatarDataUrl ? (
                   <img
                     src={user.avatarDataUrl}
                     alt={user.name}
-                    className="h-8 w-8 rounded-full object-cover"
+                    className="h-8 w-8 rounded-xl object-cover ring-2 ring-border/50"
                   />
                 ) : (
-                  <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-semibold">
+                  <div className="h-8 w-8 rounded-xl bg-primary shadow-md shadow-primary/25 flex items-center justify-center text-primary-foreground text-sm font-semibold">
                     {user?.name.charAt(0).toUpperCase()}
                   </div>
                 )}
