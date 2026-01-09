@@ -7,7 +7,7 @@ interface AuthContextType {
   user: auth.PublicUser | null;
   session: auth.Session | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ success: true; user: auth.PublicUser } | { success: false; error: string }>;
+  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<{ success: true; user: auth.PublicUser } | { success: false; error: string }>;
   signUp: (email: string, password: string, name: string) => Promise<{ success: true; user: auth.PublicUser } | { success: false; error: string }>;
   signOut: () => void;
   refresh: () => void;
@@ -46,8 +46,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [refresh]);
 
-  const signInHandler = React.useCallback(async (email: string, password: string) => {
-    const result = await auth.signIn(email, password);
+  const signInHandler = React.useCallback(async (email: string, password: string, rememberMe: boolean = false) => {
+    const result = await auth.signIn(email, password, rememberMe);
     if (result.success) {
       refresh();
     }

@@ -30,6 +30,7 @@ export interface User {
 export interface Session {
   userId: string;
   createdAt: string;
+  expiresAt: string;
 }
 
 export interface PublicUser {
@@ -112,10 +113,14 @@ export async function signUp(
     users.push(newUser);
     saveUsers(users);
     
-    // Create session
+    // Create session (default 7 days for new signups)
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+    
     const session: Session = {
       userId: newUser.id,
       createdAt: new Date().toISOString(),
+      expiresAt: expiresAt.toISOString(),
     };
     saveSession(session);
     
@@ -127,7 +132,8 @@ export async function signUp(
 
 export async function signIn(
   email: string,
-  password: string
+  password: string,
+  rememberMe: boolean = false
 ): Promise<{ success: true; user: PublicUser } | { success: false; error: string }> {
   try {
     const users = getUsers();
@@ -139,10 +145,16 @@ export async function signIn(
       return { success: false, error: "Invalid email or password" };
     }
     
-    // Create session
+    // Create session with expiry based on rememberMe
+    // rememberMe: 7 days, otherwise: 1 day
+    const expiryDays = rememberMe ? 7 : 1;
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + expiryDays);
+    
     const session: Session = {
       userId: user.id,
       createdAt: new Date().toISOString(),
+      expiresAt: expiresAt.toISOString(),
     };
     saveSession(session);
     
@@ -157,11 +169,20 @@ export function signOut(): void {
 }
 
 export function getSession(): Session | null {
-  return getStoredSession();
+  const session = getStoredSession();
+  if (!session) return null;
+  
+  // Check if session has expired
+  if (session.expiresAt && new Date(session.expiresAt) < new Date()) {
+    saveSession(null);
+    return null;
+  }
+  
+  return session;
 }
 
 export function getCurrentUser(): PublicUser | null {
-  const session = getStoredSession();
+  const session = getSession();
   if (!session) return null;
   
   const users = getUsers();
