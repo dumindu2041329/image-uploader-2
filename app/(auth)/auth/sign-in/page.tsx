@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
-import { ImageIcon } from "lucide-react";
 
 function SignInForm() {
   const router = useRouter();
@@ -39,70 +38,61 @@ function SignInForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center gradient-bg p-4">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl">
-            <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
-              <ImageIcon className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <span>ImageVault</span>
+    <Card className="glass-card animate-in">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl">Welcome Back</CardTitle>
+        <CardDescription>Sign in to your account to continue</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="h-11"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="h-11"
+            />
+          </div>
+          <Button type="submit" className="w-full h-11" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
+          </Button>
+        </form>
+        
+        <div className="mt-6 text-center text-sm">
+          <span className="text-muted-foreground">Don&apos;t have an account?</span>{" "}
+          <Link href="/auth/sign-up" className="text-primary hover:underline font-medium">
+            Sign up
           </Link>
         </div>
-
-        <Card className="glass">
-          <CardHeader>
-            <CardTitle>Welcome Back</CardTitle>
-            <CardDescription>Sign in to your account to continue</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Signing in..." : "Sign In"}
-              </Button>
-            </form>
-            
-            <div className="mt-6 text-center text-sm">
-              <span className="text-muted-foreground">Don't have an account?</span>{" "}
-              <Link href="/auth/sign-up" className="text-primary hover:underline font-medium">
-                Sign up
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 
 export default function SignInPage() {
   return (
     <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center gradient-bg">
-        <div className="text-center">Loading...</div>
-      </div>
+      <Card className="glass-card">
+        <CardContent className="flex items-center justify-center py-12">
+          <div className="text-muted-foreground">Loading...</div>
+        </CardContent>
+      </Card>
     }>
       <SignInForm />
     </Suspense>
