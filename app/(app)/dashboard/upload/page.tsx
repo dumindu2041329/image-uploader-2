@@ -213,12 +213,12 @@ export default function UploadPage() {
             <Upload className="w-4 h-4 mr-2" />
             Upload More
           </Button>
-          <Button asChild>
-            <Link href="/dashboard/gallery">
+          <Link href="/dashboard/gallery">
+            <Button>
               <FolderOpen className="w-4 h-4 mr-2" />
               Go to Gallery
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </div>
     );

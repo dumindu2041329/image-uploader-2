@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getStoredSettings } from "@/lib/settings";
 import {
   Dialog,
   DialogContent,
@@ -75,6 +76,7 @@ export default function GalleryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [filterTag, setFilterTag] = useState<string | null>(null);
+  const [galleryDensity, setGalleryDensity] = useState<"comfortable" | "compact">("comfortable");
 
   // Preview dialog state
   const [previewImage, setPreviewImage] = useState<ImageWithUrl | null>(null);
@@ -91,7 +93,13 @@ export default function GalleryPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingImage, setDeletingImage] = useState<ImageWithUrl | null>(null);
 
-  // Load images
+  // Load settings and images
+  useEffect(() => {
+    const settings = getStoredSettings();
+    setSortBy(settings.defaultSort);
+    setGalleryDensity(settings.galleryDensity);
+  }, []);
+
   useEffect(() => {
     async function loadImages() {
       if (!user) return;
@@ -344,12 +352,12 @@ export default function GalleryPage() {
           <p className="text-muted-foreground mb-6 max-w-sm">
             Your gallery is empty. Upload your first images to get started!
           </p>
-          <Button asChild>
-            <Link href="/dashboard/upload">
+          <Link href="/dashboard/upload">
+            <Button>
               <Upload className="w-4 h-4 mr-2" />
               Upload Images
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </Card>
       </div>
     );
@@ -357,18 +365,26 @@ export default function GalleryPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Gallery</h1>
-        <p className="text-muted-foreground">
-          {images.length} image{images.length !== 1 ? "s" : ""} in your collection
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Gallery</h1>
+          <p className="text-muted-foreground">
+            {images.length} image{images.length !== 1 ? "s" : ""} in your collection
+          </p>
+        </div>
+        <Link href="/dashboard/upload">
+          <Button>
+            <Upload className="w-4 h-4 mr-2" />
+            Upload Images
+          </Button>
+        </Link>
       </div>
 
       {/* Controls Bar */}
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none z-10" />
           <Input
             placeholder="Search by name or tag..."
             value={searchQuery}
@@ -474,7 +490,11 @@ export default function GalleryPage() {
       )}
 
       {/* Image Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className={`grid grid-cols-1 ${
+        galleryDensity === "compact"
+          ? "sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3"
+          : "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      }`}>
         {filteredImages.map((image) => (
           <Card
             key={image.id}
@@ -490,7 +510,7 @@ export default function GalleryPage() {
                 alt={image.name}
                 className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100 pointer-events-none">
                 <Eye className="w-8 h-8 text-white drop-shadow-lg" />
               </div>
             </div>

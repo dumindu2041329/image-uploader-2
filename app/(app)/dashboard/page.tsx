@@ -140,19 +140,19 @@ export default function DashboardOverviewPage() {
       label: "Upload images",
       href: "/dashboard/upload",
       icon: Upload,
-      color: "bg-primary hover:bg-primary/90",
+      variant: "default" as const,
     },
     {
       label: "View gallery",
       href: "/dashboard/gallery",
       icon: GalleryHorizontalEnd,
-      color: "bg-secondary hover:bg-secondary/80",
+      variant: "secondary" as const,
     },
     {
       label: "Edit profile",
       href: "/dashboard/profile",
       icon: UserCircle,
-      color: "bg-secondary hover:bg-secondary/80",
+      variant: "outline" as const,
     },
   ];
 
@@ -210,7 +210,7 @@ export default function DashboardOverviewPage() {
         <div className="flex flex-wrap gap-3">
           {quickActions.map((action) => (
             <Link key={action.href} href={action.href}>
-              <Button className={`gap-2 ${action.color}`}>
+              <Button variant={action.variant} className="gap-2">
                 <action.icon className="h-4 w-4" />
                 {action.label}
               </Button>

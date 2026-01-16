@@ -179,8 +179,8 @@ export const ImageCard = memo(function ImageCard({
         {/* Hover Overlay */}
         <div
           className={cn(
-            "absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors",
-            "flex items-center justify-center opacity-0 group-hover:opacity-100"
+            "absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200",
+            "flex items-center justify-center opacity-0 group-hover:opacity-100 pointer-events-none"
           )}
         >
           <Eye className="w-8 h-8 text-white drop-shadow-lg" />
