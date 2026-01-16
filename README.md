@@ -1,4 +1,4 @@
-# 🖼️ ImageVault - Local-First Image Management Platform
+# 🖼️ ImageVault - Image Management Platform
 
 <div align="center">
 
