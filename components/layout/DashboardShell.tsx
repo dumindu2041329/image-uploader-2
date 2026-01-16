@@ -273,21 +273,19 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <ThemeToggle />
 
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="gap-2 rounded-xl focus-visible:ring-2 focus-visible:ring-primary">
-                  {user?.avatarDataUrl ? (
-                    <img
-                      src={user.avatarDataUrl}
-                      alt=""
-                      className="h-8 w-8 rounded-xl object-cover ring-2 ring-border/50"
-                    />
-                  ) : (
-                    <div className="h-8 w-8 rounded-xl bg-primary shadow-md shadow-primary/25 flex items-center justify-center text-primary-foreground text-sm font-semibold">
-                      {user?.name?.charAt(0).toUpperCase() || "U"}
-                    </div>
-                  )}
-                  <span className="hidden lg:inline max-w-[120px] truncate">{user?.name}</span>
-                </Button>
+              <DropdownMenuTrigger className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:bg-accent/50 hover:text-accent-foreground h-10 px-3">
+                {user?.avatarDataUrl ? (
+                  <img
+                    src={user.avatarDataUrl}
+                    alt=""
+                    className="h-8 w-8 rounded-xl object-cover ring-2 ring-border/50"
+                  />
+                ) : (
+                  <div className="h-8 w-8 rounded-xl bg-primary shadow-md shadow-primary/25 flex items-center justify-center text-primary-foreground text-sm font-semibold">
+                    {user?.name?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                )}
+                <span className="hidden lg:inline max-w-[120px] truncate">{user?.name}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>

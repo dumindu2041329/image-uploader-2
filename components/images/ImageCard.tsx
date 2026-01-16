@@ -152,14 +152,14 @@ export const ImageCard = memo(function ImageCard({
   return (
     <Card
       className={cn(
-        "group overflow-hidden hover:shadow-lg transition-all duration-200",
+        "group overflow-visible hover:shadow-lg transition-all duration-200",
         className
       )}
     >
       {/* Thumbnail */}
       <div
         className={cn(
-          "relative cursor-pointer overflow-hidden bg-muted",
+          "relative cursor-pointer overflow-hidden bg-muted rounded-t-xl",
           isCompact ? "aspect-square" : "aspect-square"
         )}
         onClick={handlePreviewClick}
@@ -185,38 +185,21 @@ export const ImageCard = memo(function ImageCard({
         >
           <Eye className="w-8 h-8 text-white drop-shadow-lg" />
         </div>
-      </div>
 
-      {/* Info Section */}
-      <div className={cn(isCompact ? "p-2" : "p-3")}>
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0 flex-1">
-            <p
-              className={cn(
-                "font-medium truncate",
-                isCompact ? "text-xs" : "text-sm"
-              )}
-              title={image.name}
-            >
-              {image.name}
-            </p>
-            <p
-              className={cn(
-                "text-muted-foreground",
-                isCompact ? "text-[10px]" : "text-xs"
-              )}
-            >
-              {formatDate(image.createdAt)}
-            </p>
-          </div>
-
-          {/* Actions Menu */}
+        {/* Actions Menu - Overlay on Image */}
+        <div 
+          className={cn(
+            "absolute z-10",
+            isCompact ? "top-1 right-1" : "top-2 right-2"
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
           <DropdownMenu>
             <DropdownMenuTrigger
               className={cn(
-                "rounded-lg hover:bg-accent/50 transition-colors",
+                "rounded-lg bg-background/80 backdrop-blur-sm hover:bg-background transition-colors shadow-lg",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                isCompact ? "p-0.5" : "p-1"
+                isCompact ? "p-1" : "p-1.5"
               )}
               aria-label={`Actions for ${image.name}`}
             >
@@ -259,6 +242,29 @@ export const ImageCard = memo(function ImageCard({
               )}
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+      </div>
+
+      {/* Info Section */}
+      <div className={cn(isCompact ? "p-2" : "p-3")}>
+        <div className="min-w-0">
+          <p
+            className={cn(
+              "font-medium truncate",
+              isCompact ? "text-xs" : "text-sm"
+            )}
+            title={image.name}
+          >
+            {image.name}
+          </p>
+          <p
+            className={cn(
+              "text-muted-foreground",
+              isCompact ? "text-[10px]" : "text-xs"
+            )}
+          >
+            {formatDate(image.createdAt)}
+          </p>
         </div>
 
         {/* Tags */}

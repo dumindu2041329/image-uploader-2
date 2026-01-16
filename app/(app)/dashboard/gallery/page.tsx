@@ -498,11 +498,11 @@ export default function GalleryPage() {
         {filteredImages.map((image) => (
           <Card
             key={image.id}
-            className="group overflow-hidden hover:shadow-lg transition-all duration-200"
+            className="group overflow-visible hover:shadow-lg transition-all duration-200"
           >
             {/* Thumbnail */}
             <div
-              className="aspect-square relative cursor-pointer overflow-hidden bg-muted"
+              className="aspect-square relative cursor-pointer overflow-hidden bg-muted rounded-t-xl"
               onClick={() => handlePreview(image)}
             >
               <img
@@ -513,26 +513,17 @@ export default function GalleryPage() {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100 pointer-events-none">
                 <Eye className="w-8 h-8 text-white drop-shadow-lg" />
               </div>
-            </div>
-
-            {/* Info */}
-            <div className="p-3">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium truncate" title={image.name}>
-                    {image.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {formatDate(image.createdAt)}
-                  </p>
-                </div>
-
-                {/* Actions Menu */}
+              
+              {/* Actions Menu - Overlay on Image */}
+              <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="p-1 rounded-lg hover:bg-accent/50 transition-colors">
+                  <DropdownMenuTrigger 
+                    className="p-1.5 rounded-lg bg-background/80 backdrop-blur-sm hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-lg"
+                    aria-label={`Actions for ${image.name}`}
+                  >
                     <MoreVertical className="w-4 h-4" />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => handlePreview(image)}>
                       <Eye className="w-4 h-4 mr-2" />
                       Preview
@@ -559,6 +550,18 @@ export default function GalleryPage() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+              </div>
+            </div>
+
+            {/* Info */}
+            <div className="p-3">
+              <div className="min-w-0">
+                <p className="font-medium truncate" title={image.name}>
+                  {image.name}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {formatDate(image.createdAt)}
+                </p>
               </div>
 
               {/* Tags */}
