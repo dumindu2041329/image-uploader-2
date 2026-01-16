@@ -184,9 +184,6 @@ export default function SettingsPage() {
                   >
                     {option.label}
                   </span>
-                  {theme === option.value && (
-                    <CheckCircle2 className="h-4 w-4 text-primary absolute top-2 right-2" />
-                  )}
                 </button>
               ))}
             </div>
@@ -269,81 +266,9 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Data Export */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Download className="h-5 w-5" />
-            Export Data
-          </CardTitle>
-          <CardDescription>
-            Download your image metadata as JSON
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-start gap-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
-            <AlertTriangle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
-            <div className="text-sm">
-              <p className="font-medium text-amber-500">Export includes metadata only</p>
-              <p className="text-muted-foreground">
-                Image files (blobs) are not included in the export to keep file sizes manageable.
-                You can download individual images from the gallery.
-              </p>
-            </div>
-          </div>
 
-          <Button
-            onClick={() => handleExportMetadata(false)}
-            disabled={exporting}
-            className="w-full sm:w-auto"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            {exporting ? "Exporting..." : "Export Metadata JSON"}
-          </Button>
-        </CardContent>
-      </Card>
 
-      {/* About */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Info className="h-5 w-5" />
-            About
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-3">
-            <div className="flex justify-between py-2 border-b border-border/50">
-              <span className="text-muted-foreground">Version</span>
-              <span className="font-mono text-sm">{APP_VERSION}</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-border/50">
-              <span className="text-muted-foreground">Storage</span>
-              <span className="font-medium">Browser Local Storage + IndexedDB</span>
-            </div>
-            <div className="flex justify-between py-2">
-              <span className="text-muted-foreground">Backend</span>
-              <span className="font-medium">None (Local-first)</span>
-            </div>
-          </div>
 
-          <div className="flex items-start gap-3 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
-            <Info className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-            <div className="text-sm">
-              <p className="font-medium text-blue-500">Local-First Demo Application</p>
-              <p className="text-muted-foreground mt-1">
-                This is a demonstration app that stores all data locally in your browser.
-                No data is sent to any server. Your images, profile, and settings are
-                stored using localStorage and IndexedDB.
-              </p>
-              <p className="text-muted-foreground mt-2">
-                <strong>Note:</strong> Clearing your browser data will permanently delete
-                all stored information.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

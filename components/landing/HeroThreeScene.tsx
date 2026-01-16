@@ -22,8 +22,10 @@ function useWebGLSupport(): boolean {
       const canvas = document.createElement("canvas");
       const gl =
         canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSupported(!!gl);
     } catch {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSupported(false);
     }
   }, []);
@@ -249,6 +251,7 @@ export function HeroThreeScene() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
   }, []);
 

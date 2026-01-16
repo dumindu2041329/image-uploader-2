@@ -431,22 +431,7 @@ export default function UploadPage() {
         </>
       )}
 
-      {/* Privacy Info Card */}
-      <Card className="bg-blue-500/5 border-blue-500/20">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base flex items-center gap-2">
-            <Shield className="w-5 h-5 text-blue-500" />
-            Privacy
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Your images are stored locally in your browser using IndexedDB. They never leave
-            your device. Clearing your browser&apos;s site data will permanently remove all
-            stored images.
-          </p>
-        </CardContent>
-      </Card>
+
     </div>
   );
 }

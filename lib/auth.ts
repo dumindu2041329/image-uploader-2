@@ -192,7 +192,7 @@ export function getCurrentUser(): PublicUser | null {
 }
 
 export async function updateProfile(
-  updates: Partial<Pick<User, "name" | "avatarDataUrl" | "bio">>
+  updates: Partial<Pick<User, "name" | "avatarDataUrl" | "bio" | "email">>
 ): Promise<{ success: true; user: PublicUser } | { success: false; error: string }> {
   try {
     const session = getStoredSession();
@@ -205,6 +205,14 @@ export async function updateProfile(
     
     if (userIndex === -1) {
       return { success: false, error: "User not found" };
+    }
+
+    // Check if email is being updated and if it's already taken
+    if (updates.email && updates.email !== users[userIndex].email) {
+      const emailExists = users.some(u => u.email === updates.email && u.id !== session.userId);
+      if (emailExists) {
+        return { success: false, error: "Email already in use" };
+      }
     }
     
     // Update user

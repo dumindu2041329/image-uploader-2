@@ -11,7 +11,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, name: string) => Promise<{ success: true; user: auth.PublicUser } | { success: false; error: string }>;
   signOut: () => void;
   refresh: () => void;
-  updateProfile: (updates: Partial<Pick<auth.User, "name" | "avatarDataUrl" | "bio">>) => Promise<{ success: true; user: auth.PublicUser } | { success: false; error: string }>;
+  updateProfile: (updates: Partial<Pick<auth.User, "name" | "avatarDataUrl" | "bio" | "email">>) => Promise<{ success: true; user: auth.PublicUser } | { success: false; error: string }>;
 }
 
 const AuthContext = React.createContext<AuthContextType | null>(null);
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refresh();
   }, [refresh]);
 
-  const updateProfileHandler = React.useCallback(async (updates: Partial<Pick<auth.User, "name" | "avatarDataUrl" | "bio">>) => {
+  const updateProfileHandler = React.useCallback(async (updates: Partial<Pick<auth.User, "name" | "avatarDataUrl" | "bio" | "email">>) => {
     const result = await auth.updateProfile(updates);
     if (result.success) {
       refresh();

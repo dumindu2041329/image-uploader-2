@@ -9,7 +9,7 @@ export default function AuthLayout({
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Brand Panel - Left Side */}
-      <div className="relative hidden lg:flex lg:w-1/2 xl:w-[55%] flex-col justify-between p-10 overflow-hidden">
+      <div className="relative hidden lg:flex lg:w-1/2 xl:w-[55%] flex-col p-10 overflow-hidden">
         {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/70" />
         
@@ -40,7 +40,7 @@ export default function AuthLayout({
         </div>
 
         {/* Feature Bullets */}
-        <div className="relative z-10 space-y-8 max-w-md">
+        <div className="relative z-10 space-y-8 max-w-md my-auto">
           <h2 className="text-3xl xl:text-4xl font-bold text-white leading-tight">
             Your images, beautifully organized
           </h2>
@@ -64,15 +64,7 @@ export default function AuthLayout({
           </div>
         </div>
 
-        {/* Privacy Note */}
-        <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
-            <Lock className="h-4 w-4 text-white/80" />
-            <span className="text-sm text-white/80">
-              Local-first • Your data stays yours
-            </span>
-          </div>
-        </div>
+
       </div>
 
       {/* Auth Form Panel - Right Side */}

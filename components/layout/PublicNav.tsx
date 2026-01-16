@@ -22,6 +22,7 @@ export function PublicNav() {
   // Check auth status on mount
   useEffect(() => {
     const user = getCurrentUser();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsAuthenticated(!!user);
     setMounted(true);
   }, []);

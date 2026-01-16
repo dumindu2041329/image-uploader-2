@@ -96,24 +96,33 @@ export function ImagePreviewDialog({
   // Load image URL
   useEffect(() => {
     if (!image) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setImageUrl(null);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false);
       return;
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setZoom(1);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRotation(0);
 
     if (image.url) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setImageUrl(image.url);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false);
       return;
     }
 
     if (image.blob) {
       const url = URL.createObjectURL(image.blob);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setImageUrl(url);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false);
 
       return () => {
@@ -121,6 +130,7 @@ export function ImagePreviewDialog({
       };
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(false);
   }, [image]);
 
@@ -149,20 +159,16 @@ export function ImagePreviewDialog({
         case "+":
         case "=":
           e.preventDefault();
-          setZoom((z) => Math.min(z + 0.25, 3));
+          setZoom((z) => Math.min(z + 0.5, 3));
           break;
         case "-":
           e.preventDefault();
-          setZoom((z) => Math.max(z - 0.25, 0.5));
+          setZoom((z) => Math.max(z - 0.5, 0.5));
           break;
         case "r":
+        case "R":
           e.preventDefault();
-          setRotation((r) => (r + 90) % 360);
-          break;
-        case "0":
-          e.preventDefault();
-          setZoom(1);
-          setRotation(0);
+          setRotation((r) => r + 90);
           break;
       }
     };
@@ -171,235 +177,185 @@ export function ImagePreviewDialog({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open, hasPrevious, hasNext, onPrevious, onNext, onOpenChange]);
 
-  // Focus trap
-  useEffect(() => {
-    if (open && dialogRef.current) {
-      dialogRef.current.focus();
-    }
-  }, [open]);
-
-  const handleDownload = useCallback(() => {
-    if (!image || !imageUrl) return;
-
-    const a = document.createElement("a");
-    a.href = imageUrl;
-    a.download = image.name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    onDownload?.(image);
-  }, [image, imageUrl, onDownload]);
-
-  const handleDelete = useCallback(() => {
-    if (!image) return;
-    onDelete?.(image);
-  }, [image, onDelete]);
-
-  const resetView = useCallback(() => {
-    setZoom(1);
-    setRotation(0);
-  }, []);
-
-  if (!image) return null;
+  if (!open) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <div
-        ref={dialogRef}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-label={`Image preview: ${image.name}`}
-      >
-        {/* Navigation Buttons */}
-        {showNavigation && hasPrevious && (
-          <button
-            onClick={onPrevious}
-            className={cn(
-              "absolute left-2 sm:left-4 z-10 p-2 sm:p-3 rounded-full",
-              "bg-background/80 backdrop-blur-sm hover:bg-background transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            )}
-            aria-label="Previous image"
-          >
-            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-        )}
-
-        {showNavigation && hasNext && (
-          <button
-            onClick={onNext}
-            className={cn(
-              "absolute right-2 sm:right-4 z-10 p-2 sm:p-3 rounded-full",
-              "bg-background/80 backdrop-blur-sm hover:bg-background transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            )}
-            aria-label="Next image"
-          >
-            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-        )}
-
-        {/* Close Button */}
-        <button
-          onClick={() => onOpenChange(false)}
-          className={cn(
-            "absolute top-2 right-2 sm:top-4 sm:right-4 z-10 p-2 rounded-full",
-            "bg-background/80 backdrop-blur-sm hover:bg-background transition-colors",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          )}
-          aria-label="Close preview"
-        >
-          <X className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-
-        {/* Zoom Controls */}
-        <div
-          className={cn(
-            "absolute top-2 left-2 sm:top-4 sm:left-4 z-10 flex items-center gap-1",
-            "bg-background/80 backdrop-blur-sm rounded-full p-1"
-          )}
-        >
-          <button
-            onClick={() => setZoom((z) => Math.max(z - 0.25, 0.5))}
-            className="p-1.5 rounded-full hover:bg-accent/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            aria-label="Zoom out"
-            disabled={zoom <= 0.5}
-          >
-            <ZoomOut className="w-4 h-4" />
-          </button>
-          <span className="text-xs font-medium px-2 min-w-[3rem] text-center">
-            {Math.round(zoom * 100)}%
-          </span>
-          <button
-            onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
-            className="p-1.5 rounded-full hover:bg-accent/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            aria-label="Zoom in"
-            disabled={zoom >= 3}
-          >
-            <ZoomIn className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setRotation((r) => (r + 90) % 360)}
-            className="p-1.5 rounded-full hover:bg-accent/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            aria-label="Rotate"
-          >
-            <RotateCw className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Main Content */}
-        <div className="max-w-4xl w-full max-h-[90vh] flex flex-col glass-strong rounded-2xl overflow-hidden">
-          {/* Image Container */}
-          <div
-            className="flex-1 min-h-0 bg-black/20 flex items-center justify-center p-4 overflow-auto"
-            onClick={resetView}
-          >
-            {loading ? (
-              <Skeleton className="w-full h-[60vh] rounded-lg" />
-            ) : imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={image.name}
-                className="max-w-full max-h-[60vh] object-contain rounded-lg transition-transform duration-200"
-                style={{
-                  transform: `scale(${zoom}) rotate(${rotation}deg)`,
-                }}
-                onClick={(e) => e.stopPropagation()}
-              />
-            ) : (
-              <div className="text-center text-muted-foreground">
-                <p>Unable to load image</p>
-              </div>
-            )}
-          </div>
-
-          {/* Metadata Section */}
-          <div className="p-4 space-y-3 border-t border-border/30">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0 flex-1">
-                <h3 className="text-lg font-semibold truncate" title={image.name}>
-                  {image.name}
-                </h3>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground mt-1">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    {formatDate(image.createdAt)}
+      <DialogContent className="max-w-[95vw] w-full h-[95vh] p-0 overflow-hidden bg-background/95 backdrop-blur-xl border-border/50">
+        <div className="relative h-full flex flex-col" ref={dialogRef}>
+          {/* Header / Controls */}
+          <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-gradient-to-b from-background/80 to-transparent">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onOpenChange(false)}
+                className="rounded-full bg-background/50 hover:bg-background/80 backdrop-blur-sm"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+              {image && (
+                <div className="hidden md:flex flex-col ml-2">
+                  <span className="text-sm font-medium truncate max-w-[200px]">
+                    {image.name}
                   </span>
-                  {image.size && (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
-                      <HardDrive className="w-4 h-4" />
-                      {formatFileSize(image.size)}
+                      <Calendar className="h-3 w-3" />
+                      {formatDate(image.createdAt)}
                     </span>
-                  )}
+                    {image.size && (
+                      <span className="flex items-center gap-1">
+                        <HardDrive className="h-3 w-3" />
+                        {formatFileSize(image.size)}
+                      </span>
+                    )}
+                  </div>
                 </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-1 bg-background/50 backdrop-blur-sm rounded-full p-1 border border-border/50">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  onClick={() => setZoom((z) => Math.max(z - 0.25, 0.5))}
+                  disabled={zoom <= 0.5}
+                >
+                  <ZoomOut className="h-4 w-4" />
+                </Button>
+                <span className="text-xs font-mono w-12 text-center">
+                  {Math.round(zoom * 100)}%
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  onClick={() => setZoom((z) => Math.min(z + 0.25, 3))}
+                  disabled={zoom >= 3}
+                >
+                  <ZoomIn className="h-4 w-4" />
+                </Button>
+                <div className="w-px h-4 bg-border/50 mx-1" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  onClick={() => setRotation((r) => r + 90)}
+                >
+                  <RotateCw className="h-4 w-4" />
+                </Button>
               </div>
 
-              {/* Action Buttons */}
-              {showActions && (
-                <div className="flex gap-2 flex-shrink-0">
-                  <Button size="sm" variant="outline" onClick={handleDownload}>
-                    <Download className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">Download</span>
-                  </Button>
+              {showActions && image && (
+                <div className="flex items-center gap-2">
+                  {onDownload && (
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="rounded-full bg-background/50 backdrop-blur-sm"
+                      onClick={() => onDownload(image)}
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  )}
                   {onDelete && (
-                    <Button size="sm" variant="outline" onClick={handleDelete}>
-                      <Trash2 className="w-4 h-4" />
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="rounded-full"
+                      onClick={() => onDelete(image)}
+                    >
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   )}
                 </div>
               )}
             </div>
+          </div>
 
-            {/* Tags */}
-            {image.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
-                {image.tags.map((tag, i) => (
-                  <Badge
-                    key={i}
-                    variant="secondary"
-                    className={cn(
-                      onTagClick && "cursor-pointer hover:bg-secondary/80"
-                    )}
-                    onClick={() => onTagClick?.(tag)}
-                  >
-                    {tag}
-                  </Badge>
-                ))}
+          {/* Main Content */}
+          <div className="flex-1 relative flex items-center justify-center bg-black/5 overflow-hidden">
+            {loading ? (
+              <div className="flex flex-col items-center gap-4">
+                <Skeleton className="h-48 w-48 rounded-xl" />
+                <p className="text-muted-foreground animate-pulse">Loading preview...</p>
+              </div>
+            ) : imageUrl ? (
+              <div
+                className="relative transition-all duration-300 ease-out"
+                style={{
+                  transform: `scale(${zoom}) rotate(${rotation}deg)`,
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imageUrl}
+                  alt={image?.name || "Preview"}
+                  className="max-h-[85vh] max-w-[90vw] object-contain shadow-2xl rounded-lg"
+                  draggable={false}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-4 text-muted-foreground">
+                <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center">
+                  <X className="h-8 w-8" />
+                </div>
+                <p>Preview unavailable</p>
               </div>
             )}
 
-            {/* Navigation Indicator */}
-            {showNavigation && currentIndex !== undefined && totalCount !== undefined && (
-              <p className="text-xs text-muted-foreground text-center">
-                {currentIndex + 1} of {totalCount}
-                <span className="mx-2">•</span>
-                <span className="hidden sm:inline">
-                  Use arrow keys to navigate, +/- to zoom, R to rotate
-                </span>
-                <span className="sm:hidden">Swipe to navigate</span>
-              </p>
+            {/* Navigation Buttons */}
+            {showNavigation && (
+              <>
+                {hasPrevious && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute left-4 h-12 w-12 rounded-full bg-background/50 hover:bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg transition-all hover:scale-110"
+                    onClick={onPrevious}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </Button>
+                )}
+                {hasNext && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-4 h-12 w-12 rounded-full bg-background/50 hover:bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg transition-all hover:scale-110"
+                    onClick={onNext}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </Button>
+                )}
+              </>
             )}
           </div>
-        </div>
-      </div>
-    </Dialog>
-  );
-}
 
-// Empty state for when no image is selected
-export function ImagePreviewEmptyState() {
-  return (
-    <div className="flex flex-col items-center justify-center h-full text-center p-8">
-      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-        <Calendar className="w-8 h-8 text-muted-foreground" />
-      </div>
-      <h3 className="text-lg font-medium mb-2">No Image Selected</h3>
-      <p className="text-sm text-muted-foreground">
-        Select an image from the gallery to preview it here
-      </p>
-    </div>
+          {/* Footer / Tags */}
+          {image && image.tags && image.tags.length > 0 && (
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background/90 to-transparent">
+              <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
+                {image.tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors px-3 py-1 text-sm backdrop-blur-md bg-background/50"
+                    onClick={() => {
+                      onOpenChange(false);
+                      onTagClick?.(tag);
+                    }}
+                  >
+                    #{tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

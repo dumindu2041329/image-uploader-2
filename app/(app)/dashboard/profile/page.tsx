@@ -34,6 +34,7 @@ export default function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
   const [bio, setBio] = useState(user?.bio || "");
   const [avatarDataUrl, setAvatarDataUrl] = useState(user?.avatarDataUrl || "");
   const [loading, setLoading] = useState(false);
@@ -72,6 +73,7 @@ export default function ProfilePage() {
 
     const result = await updateProfile({
       name: name.trim(),
+      email: email.trim(),
       bio: bio.trim(),
       avatarDataUrl: avatarDataUrl || undefined,
     });
@@ -199,19 +201,16 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Email Field (disabled) */}
+            {/* Email Field */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                value={user?.email || ""}
-                disabled
-                className="bg-muted/50"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              <p className="text-xs text-muted-foreground">
-                Email cannot be changed in this demo application
-              </p>
             </div>
 
             {/* Bio Field */}
@@ -236,6 +235,7 @@ export default function ProfilePage() {
                 variant="outline"
                 onClick={() => {
                   setName(user?.name || "");
+                  setEmail(user?.email || "");
                   setBio(user?.bio || "");
                   setAvatarDataUrl(user?.avatarDataUrl || "");
                 }}
@@ -257,18 +257,6 @@ export default function ProfilePage() {
           <CardDescription>Your account details and storage info</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Local-only Notice */}
-          <div className="flex items-start gap-3 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-            <Info className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-            <div className="text-sm">
-              <p className="font-medium text-blue-500">Local Storage Only</p>
-              <p className="text-muted-foreground">
-                All your data is stored locally in your browser. Nothing is sent to any server.
-                Clearing browser data will permanently delete your account and images.
-              </p>
-            </div>
-          </div>
-
           <div className="space-y-2">
             <div className="flex justify-between py-2 border-b border-border/50">
               <span className="text-muted-foreground">Email</span>

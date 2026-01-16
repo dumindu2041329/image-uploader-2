@@ -17,7 +17,6 @@ export {
 // Image Preview Dialog
 export {
   ImagePreviewDialog,
-  ImagePreviewEmptyState,
   type PreviewImageData,
   type ImagePreviewDialogProps,
 } from "./ImagePreviewDialog";

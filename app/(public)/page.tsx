@@ -384,9 +384,6 @@ export default function LandingPage() {
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Start for free, upgrade when you need more.
               </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                ⚠️ Note: Billing is not implemented. Pro and Team tiers are for demonstration only.
-              </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">

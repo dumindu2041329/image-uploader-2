@@ -7,16 +7,25 @@ interface DropdownMenuProps {
   children: React.ReactNode;
 }
 
-const DropdownMenuContext = React.createContext<{
+interface DropdownMenuContextType {
   open: boolean;
   setOpen: (open: boolean) => void;
-} | null>(null);
+  triggerRef: React.MutableRefObject<HTMLButtonElement | null>;
+  setTriggerRef: (element: HTMLButtonElement | null) => void;
+}
+
+const DropdownMenuContext = React.createContext<DropdownMenuContextType | null>(null);
 
 const DropdownMenu = ({ children }: DropdownMenuProps) => {
   const [open, setOpen] = React.useState(false);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+
+  const setTriggerRef = React.useCallback((element: HTMLButtonElement | null) => {
+    triggerRef.current = element;
+  }, []);
 
   return (
-    <DropdownMenuContext.Provider value={{ open, setOpen }}>
+    <DropdownMenuContext.Provider value={{ open, setOpen, triggerRef, setTriggerRef }}>
       <div className="relative inline-block text-left">{children}</div>
     </DropdownMenuContext.Provider>
   );
@@ -29,9 +38,21 @@ const DropdownMenuTrigger = React.forwardRef<
   const context = React.useContext(DropdownMenuContext);
   if (!context) throw new Error("DropdownMenuTrigger must be used within DropdownMenu");
 
+  const combinedRef = React.useCallback(
+    (element: HTMLButtonElement | null) => {
+      context.setTriggerRef(element);
+      if (typeof ref === "function") {
+        ref(element);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLButtonElement | null>).current = element;
+      }
+    },
+    [context, ref]
+  );
+
   return (
     <button
-      ref={ref}
+      ref={combinedRef}
       type="button"
       className={className}
       onClick={() => context.setOpen(!context.open)}
@@ -54,7 +75,11 @@ const DropdownMenuContent = React.forwardRef<
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
+      if (
+        contentRef.current &&
+        !contentRef.current.contains(event.target as Node) &&
+        (!context.triggerRef.current || !context.triggerRef.current.contains(event.target as Node))
+      ) {
         context.setOpen(false);
       }
     };

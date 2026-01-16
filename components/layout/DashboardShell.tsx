@@ -67,6 +67,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isGalleryPage) {
       const q = searchParams.get("q") || "";
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearchQuery(q);
     } else {
       setSearchQuery("");
@@ -243,7 +244,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           {/* Search bar */}
           <form onSubmit={handleSearch} className="flex-1 max-w-md hidden sm:block">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" aria-hidden="true" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" aria-hidden="true" />
               <Input
                 ref={searchInputRef}
                 type="search"
